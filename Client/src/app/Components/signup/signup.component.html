@@ -1,0 +1,25 @@
+<div class="form-bg">
+  <form [formGroup]="signupForm" class="form">
+      <div class="form-container">
+          <h4 class="form-title">Sign Up</h4>
+          <div class="form-group">
+              <input type="text" name="fullname" id="fullname" placeholder="Enter your name" formControlName="fullname" required />
+          </div>
+          <div class="form-group">
+              <input type="email" name="username" id="username" placeholder="Enter your username" formControlName="username" required />
+          </div>
+          <div class="form-group">
+              <input type="password" name="password" id="password" placeholder="Enter your password" formControlName="password" required />
+          </div>
+
+          <div class="form-group">
+              <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" formControlName="confirmPassword" required />
+          </div>
+
+          <div class="form-action">
+              <button class="signup-link" type="button" routerLink="/login">Already Registered?</button>
+              <button class="signup-button" type="button" [disabled]="signupForm.invalid" (click)="signup()">Sign Up</button>
+          </div>
+      </div>
+  </form>
+</div>
