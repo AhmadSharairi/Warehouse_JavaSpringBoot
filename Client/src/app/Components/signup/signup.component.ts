@@ -15,7 +15,7 @@ import { NgToastModule } from 'ng-angular-popup';
 })
 export class SignupComponent {
 
-  signupForm: FormGroup; // Changed to FormGroup instead of FormGroup | undefined
+  signupForm: FormGroup;
 
   message: any;
 
@@ -51,18 +51,19 @@ export class SignupComponent {
     console.log(this.signupForm.valid);
     if (this.signupForm.valid) {
         console.log(this.signupForm.value);
+
         this.service.signup(this.signupForm.value).subscribe((response) => {
+          this.router.navigate(["/"])
             this.successMsg();
         });
     } else {
-   
+
         alert("Please fill in all fields correctly.");
     }
 }
 
-
   successMsg() {
     alert("*** User Registered Successfully ***");
-    this.router.navigate(['login']);
   }
+
 }

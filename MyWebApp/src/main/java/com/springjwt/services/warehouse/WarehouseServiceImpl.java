@@ -13,7 +13,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -80,19 +81,21 @@ public class WarehouseServiceImpl implements IWarehouseService {
         warehouse.setWarehouseName(warehouseDto.getWarehouseName());
         warehouse.setWarehouseDescription(warehouseDto.getWarehouseDescription());
 
-        // Set the createdBy field with the current username
-        warehouse.setCreatedBy("ahmadsh");
-
+        String username = getCurrentUsername();
+        warehouse.setCreatedBy(username);
         return warehouseRepository.save(warehouse);
 
     }
 
     @Override
-    public Warehouse createWarehouseWithItems(WarehouseDto warehouseDto) {
+    public Warehouse createWarehouseWithItems(WarehouseDto warehouseDto)
+     {
         Warehouse warehouse = new Warehouse();
         warehouse.setWarehouseName(warehouseDto.getWarehouseName());
         warehouse.setWarehouseDescription(warehouseDto.getWarehouseDescription());
-        warehouse.setCreatedBy("ahmadsh");
+
+        String username = getCurrentUsername();
+        warehouse.setCreatedBy(username);
 
         List<Item> items = warehouseDto.getItems().stream()
                 .map(itemDto -> {
@@ -115,6 +118,25 @@ public class WarehouseServiceImpl implements IWarehouseService {
         return warehouseRepository.save(warehouse);
     }
 
+
+    private String getCurrentUsername() //this get usernmae form 
+
+    
+    {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else {
+            return principal.toString();
+        }
+    }
+
+
+
+
+
+
     @Override
     public Optional<Warehouse> updateWarehouse(Long id, WarehouseDto warehouseDto) {
         return warehouseRepository.findById(id).map(existingWarehouse -> {
@@ -136,9 +158,10 @@ public class WarehouseServiceImpl implements IWarehouseService {
         return List.of();
     }
     
-
+    
     @Override
-    public ResponseEntity<Warehouse> deleteWarehouse(Long warehouseId) {
+    public ResponseEntity<Warehouse> deleteWarehouse(Long warehouseId)
+     {
         String sql = "CALL DeleteWarehouse(?)";
         int rowsAffected = jdbcTemplate.update(sql, warehouseId);
     
@@ -168,5 +191,8 @@ public class WarehouseServiceImpl implements IWarehouseService {
         dto.setStatus(warehouse.getItems().isEmpty() ? "Empty" : "Available");
         return dto;
     }
+
+
+    
 
 }

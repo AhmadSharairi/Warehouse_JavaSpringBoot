@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
+import { AuthService } from '../Components/login/auth.service';
+import { TokenModel } from '../shared/models/token-api.model';
 
 import {
   HttpErrorResponse,
@@ -10,13 +12,12 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
-import { LoginService } from '../Components/login/auth.service';
-import { TokenModel } from '../shared/models/token-api.model';
+
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   constructor(
-    private auth: LoginService,
+    private auth: AuthService,
     private toast: NgToastService,
     private roter: Router
   ) {}
@@ -49,14 +50,13 @@ export class TokenInterceptor implements HttpInterceptor {
 
   handleUnAuthorizedError(req: HttpRequest<any>, next: HttpHandler) {
     let tokenApiModel = new TokenModel();
-    tokenApiModel.accsessToken = this.auth.getToken()!;
-    tokenApiModel.refreshToken = this.auth.getRefreshToken()!;
+    tokenApiModel.jwtToken = this.auth.getToken()!;
     return this.auth.renewToken(tokenApiModel).pipe(
       switchMap((data: TokenModel) => {
-        this.auth.storeRefreshToken(data.refreshToken);
-        this.auth.storeToken(data.accsessToken);
+        this.auth.storeRefreshToken(data.jwtToken);
+        this.auth.storeToken(data.jwtToken);
         req = req.clone({
-          setHeaders: { Authorization: `Bearer ${data.accsessToken}` }, //  "Bearer"+mytoken
+          setHeaders: { Authorization: `Bearer ${data.jwtToken}` }, //  "Bearer"+mytoken
         });
         return next.handle(req);
       }),

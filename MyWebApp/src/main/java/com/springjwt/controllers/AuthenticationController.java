@@ -21,7 +21,7 @@ import com.springjwt.util.JwtUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-// Add logger to the controller
+
 @RestController
 public class AuthenticationController {
 

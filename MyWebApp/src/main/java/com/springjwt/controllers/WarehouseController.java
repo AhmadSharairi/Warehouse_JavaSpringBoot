@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import com.springjwt.dto.WarehouseDto;
 import com.springjwt.dto.WarehouseInfoDto;
 import com.springjwt.entities.Warehouse;
@@ -45,49 +46,62 @@ public class WarehouseController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long id) {
+  public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long id) 
+  {
     WarehouseDto warehouse = warehouseService.getWarehouseById(id);
     return ResponseEntity.ok(warehouse);
   }
 
   @PostMapping
-  public ResponseEntity<Warehouse> createWarehouse(@RequestBody WarehouseDto warehouseDto) {
+  public ResponseEntity<Warehouse> createWarehouse(@RequestBody WarehouseDto warehouseDto) 
+  {
     Warehouse warehouse = warehouseService.createWarehouse(warehouseDto);
     return new ResponseEntity<>(warehouse, HttpStatus.CREATED);
   }
 
   @PostMapping("/withItems")
-  public ResponseEntity<Warehouse> createWarehouseWithItems(@RequestBody WarehouseDto warehouseDto) {
+  public ResponseEntity<Warehouse> createWarehouseWithItems(@RequestBody WarehouseDto warehouseDto) 
+  {
     Warehouse warehouse = warehouseService.createWarehouseWithItems(warehouseDto);
     return new ResponseEntity<>(warehouse, HttpStatus.CREATED);
   }
 
+
+
   @PutMapping("/{id}")
-  public ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id, @RequestBody WarehouseDto warehouseDto) {
+  public ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id, @RequestBody WarehouseDto warehouseDto) 
+  {
     Optional<Warehouse> updatedWarehouse = warehouseService.updateWarehouse(id, warehouseDto);
     return updatedWarehouse.map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
+        .orElseGet(() -> 
+        ResponseEntity.notFound().build());
   }
 
   @GetMapping("/items/count")
-  public ResponseEntity<Long> getTotalItemsCount() {
+  public ResponseEntity<Long> getTotalItemsCount() 
+  {
     Long totalCount = itemRepo.count();
     return ResponseEntity.ok(totalCount);
   }
 
   @GetMapping("/{warehouseId}/items")
-  public ResponseEntity<List<String>> getItemsByWarehouseId(@PathVariable Long warehouseId) {
+  public ResponseEntity<List<String>> getItemsByWarehouseId(@PathVariable Long warehouseId) 
+  {
     List<String> items = warehouseService.getItemsByWarehouseId(warehouseId);
-    return items.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(items);
+    return items.isEmpty() ? 
+    ResponseEntity.notFound().build() :
+     ResponseEntity.ok(items);
   }
 
   @DeleteMapping("/{warehouseId}")
-  public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable Long warehouseId) {
+  public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable Long warehouseId)
+   {
     return warehouseService.deleteWarehouse(warehouseId);
   }
 
   @GetMapping("/info")
-  public List<WarehouseInfoDto> getAllWarehouseInfo() {
+  public List<WarehouseInfoDto> getAllWarehouseInfo() 
+  {
     return warehouseService.getAllWarehouseInfo();
   }
 

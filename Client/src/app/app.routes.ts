@@ -15,12 +15,11 @@ import { SupplyDecComponent } from './Components/supply-dec/supply-dec.component
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   {  path: 'register', component: SignupComponent},
-
-  {  path: 'home', component: HomeComponent},
-  {  path: 'warehouse', component: WarehouseComponent},
-  {  path: 'warehouses/:id', component: WarehouseItemsComponent},
-  {  path: 'supply', component: SupplyDecComponent},
-  {  path: 'add-warehouse', component: AddWarehouseComponent},
+  {  path: 'home', component: HomeComponent , canActivate: [authGuard]},
+  {  path: 'warehouse', component: WarehouseComponent , canActivate: [authGuard]},
+  {  path: 'warehouses/:id', component: WarehouseItemsComponent , canActivate: [authGuard]},
+  {  path: 'supply', component: SupplyDecComponent , canActivate: [authGuard]},
+  {  path: 'add-warehouse', component: AddWarehouseComponent , canActivate: [authGuard]},
   {  path: 'user/:id/update-user', component: UpdateUserComponent, canActivate: [authGuard]},
   {  path: 'users', component: UserComponent, canActivate: [authGuard]},
 ];

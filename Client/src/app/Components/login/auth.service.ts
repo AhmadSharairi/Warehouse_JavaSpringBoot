@@ -19,6 +19,7 @@ export class AuthService {
 
 
   loginPost(loginRequest: any): Observable<any> {
+
     return this.http.post(this.baseUrl + "authenticate", loginRequest)
   }
 
@@ -34,7 +35,7 @@ export class AuthService {
   }
 
   private createAuthorizationHeader(): HttpHeaders | undefined {
-    const jwtToken = localStorage.getItem('JWT');
+    const jwtToken = localStorage.getItem('jwtToken');
     if (jwtToken) {
         return new HttpHeaders().set(
             'Authorization', 'Bearer ' + jwtToken
@@ -49,13 +50,13 @@ export class AuthService {
 
   // store Token From BACKEND
   storeToken(tokenValue: string) {
-    localStorage.setItem('token', tokenValue);
+    localStorage.setItem('jwtToken', tokenValue);
   }
   //get Token From BACKEND
 
   getToken() {
-    const tokenHere = localStorage.getItem('JWT');
-    return localStorage.getItem('JWT');
+    const tokenHere = localStorage.getItem('jwtToken');
+    return localStorage.getItem('jwtToken');
   }
 
   // store Refresh Token from Backend
@@ -70,7 +71,7 @@ export class AuthService {
 
   //is Logged In the user or not
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('JWT'); //if user have token that make the user is loggedIn and have token, each user have diffrent token
+    return !!localStorage.getItem('jwtToken'); //if user have token that make the user is loggedIn and have token, each user have diffrent token
   }
 
   // **********************Token functions************************

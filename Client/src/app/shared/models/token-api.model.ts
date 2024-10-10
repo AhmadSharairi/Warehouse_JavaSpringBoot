@@ -1,5 +1,4 @@
 export class TokenModel{
-accsessToken!:string;
-refreshToken!: string;
+  jwtToken!:string;
 }
 

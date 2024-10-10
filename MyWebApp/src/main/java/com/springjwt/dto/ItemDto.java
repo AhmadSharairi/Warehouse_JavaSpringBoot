@@ -15,5 +15,7 @@ public class ItemDto {
     private Long id;  
     private String Name;    
     private String Description; 
-    private int Quantity;     
+    private int quantity;     
+
+    
 }

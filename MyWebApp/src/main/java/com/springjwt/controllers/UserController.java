@@ -1,7 +1,6 @@
 package com.springjwt.controllers;
 import com.springjwt.entities.User; 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() 
+    {
         List<User> users = userService.getAllUsers();
         List<UserDto> userDtos = users.stream()
                 .map(user -> modelMapper.map(user, UserDto.class))

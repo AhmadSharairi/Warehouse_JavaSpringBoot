@@ -9,12 +9,12 @@
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
           <div class="form-group my-3">
             <div class="input-field"
-              [class.error]="loginForm.controls['email'].dirty && loginForm.hasError('required', 'email')">
+              [class.error]="loginForm.controls['username'].dirty && loginForm.hasError('required', 'username')">
               <span class="fa fa-user p-2"></span>
-              <input formControlName="email" type="text" placeholder="Email" required>
+              <input formControlName="username" type="text" placeholder="Username" required>
             </div>
-            <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required', 'email')" class="text-danger">
-              Email is required
+            <small *ngIf="loginForm.controls['username'].dirty && loginForm.hasError('required', 'username')" class="text-danger">
+              username is required
             </small>
           </div>
 

@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required]],
       password: ['', Validators.required],
     });
   }
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
       if (response.jwtToken) {
 
         const jwtToken = response.jwtToken;
-        localStorage.setItem('JWT', jwtToken);
+        localStorage.setItem('jwtToken', jwtToken);
         this.toastr.success('Login Successfully');
         this.router.navigate(['/home']);
       }

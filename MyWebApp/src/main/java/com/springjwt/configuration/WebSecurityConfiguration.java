@@ -25,41 +25,37 @@ public class WebSecurityConfiguration {
     @Autowired
     private JwtRequestFilter requestFilter;
 
-    // Security Filter Chain definition
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF as this is a stateless REST API
+
             .csrf(csrf -> csrf.disable())
 
-            // Enable CORS for cross-origin requests (useful for frontend access)
+         
             .cors(cors -> cors.disable())
             
 
 
-            // .authorizeHttpRequests(auth -> auth
-            //     .requestMatchers("/authenticate", "/sign-up").permitAll()  // Publicly accessible
-            //     .anyRequest().permitAll() 
-            // )
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/authenticate", "/sign-up").permitAll() 
+                .anyRequest().permitAll() 
+            )
 
             
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // Add JWT request filter before the UsernamePasswordAuthenticationFilter
-            .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+           .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // Password encoder bean using BCrypt with a strength of 12
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+        return new BCryptPasswordEncoder();
     }
 
-    // Authentication Manager bean, used by Spring Security for authentication
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

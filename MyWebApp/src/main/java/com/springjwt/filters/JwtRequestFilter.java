@@ -1,5 +1,6 @@
 package com.springjwt.filters;
 
+
 import com.springjwt.services.jwt.UserDetailsServiceImpl;
 import com.springjwt.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -27,33 +28,38 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        String token = null;
+        String token = extractToken(request);
         String username = null;
-    
+
         try {
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                token = authHeader.substring(7);
+            if (token != null) {
                 username = jwtUtil.extractUsername(token);
             }
-    
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-    
+
                 if (jwtUtil.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
         } catch (Exception e) {
-            logger.error("JWT Authentication failed: " + e.getMessage()); 
+            logger.error("JWT Authentication failed for request: " + request.getRequestURI() + " - " + e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT Token");
             return;
         }
-    
+
         filterChain.doFilter(request, response);
     }
-}    
+
+    private String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        return null;
+    }
+}
