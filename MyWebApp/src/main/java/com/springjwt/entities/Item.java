@@ -1,6 +1,8 @@
 package com.springjwt.entities;
 
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,4 +33,7 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "warehouse_id", nullable = false)
     private Warehouse warehouse;
+
+    @OneToMany(mappedBy = "item")
+    private List<SupplyDocument> supplyDocuments;
 }

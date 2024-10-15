@@ -4,19 +4,27 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.springjwt.dto.ItemDto;
 import com.springjwt.dto.WarehouseDto;
 import com.springjwt.dto.WarehouseInfoDto;
+import com.springjwt.entities.Item;
 import com.springjwt.entities.Warehouse;
 import com.springjwt.repositories.ItemRepository;
 
 import com.springjwt.services.warehouse.IWarehouseService;
 
+import io.jsonwebtoken.io.IOException;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
+// @PreAuthorize("hasRole('Manager')")
 @RequestMapping("/api/warehouses")
 public class WarehouseController {
 
@@ -56,16 +64,15 @@ public class WarehouseController {
   public ResponseEntity<Warehouse> createWarehouse(@RequestBody WarehouseDto warehouseDto) 
   {
     Warehouse warehouse = warehouseService.createWarehouse(warehouseDto);
-    return new ResponseEntity<>(warehouse, HttpStatus.CREATED);
+    return new ResponseEntity<>(warehouse, HttpStatus.OK);
   }
 
-  @PostMapping("/withItems")
-  public ResponseEntity<Warehouse> createWarehouseWithItems(@RequestBody WarehouseDto warehouseDto) 
-  {
-    Warehouse warehouse = warehouseService.createWarehouseWithItems(warehouseDto);
-    return new ResponseEntity<>(warehouse, HttpStatus.CREATED);
-  }
-
+    @PostMapping("/withItems")
+    public ResponseEntity<Warehouse> createWarehouseWithItems(@RequestBody WarehouseDto warehouseDto) {
+        Warehouse createdWarehouse = warehouseService.createWarehouseWithItems(warehouseDto);
+        return new ResponseEntity<>(createdWarehouse, HttpStatus.OK);
+    }
+    
 
 
   @PutMapping("/{id}")
@@ -84,20 +91,23 @@ public class WarehouseController {
     return ResponseEntity.ok(totalCount);
   }
 
-  @GetMapping("/{warehouseId}/items")
-  public ResponseEntity<List<String>> getItemsByWarehouseId(@PathVariable Long warehouseId) 
-  {
-    List<String> items = warehouseService.getItemsByWarehouseId(warehouseId);
-    return items.isEmpty() ? 
-    ResponseEntity.notFound().build() :
-     ResponseEntity.ok(items);
-  }
 
-  @DeleteMapping("/{warehouseId}")
-  public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable Long warehouseId)
-   {
-    return warehouseService.deleteWarehouse(warehouseId);
+  @GetMapping("/{warehouseId}/items")
+  public ResponseEntity<List<ItemDto>> getItemsByWarehouseId(@PathVariable Long warehouseId) {
+    List<ItemDto> items = warehouseService.getItemsByWarehouseId(warehouseId);
+    if (items.isEmpty()) {
+        return ResponseEntity.notFound().build(); 
+    }
+    return ResponseEntity.ok(items); 
+}
+
+
+  @DeleteMapping("{warehouseId}")
+  public ResponseEntity<Void> deleteSupplyDocument(@PathVariable Long warehouseId) {
+    warehouseService.deleteWarehouse(warehouseId);
+      return ResponseEntity.noContent().build(); 
   }
+  
 
   @GetMapping("/info")
   public List<WarehouseInfoDto> getAllWarehouseInfo() 
@@ -105,4 +115,10 @@ public class WarehouseController {
     return warehouseService.getAllWarehouseInfo();
   }
 
+
+    @PostMapping("/export")
+    @ResponseStatus(HttpStatus.OK)
+    public void exportWarehousesToExcel(HttpServletResponse response) throws IOException {
+        warehouseService.exportWarehousesToExcel(response);
+    }
 }

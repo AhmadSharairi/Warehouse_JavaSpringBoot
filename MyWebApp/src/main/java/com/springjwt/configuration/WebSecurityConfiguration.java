@@ -28,25 +28,14 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
-            .csrf(csrf -> csrf.disable())
-
-         
-            .cors(cors -> cors.disable())
-            
-
-
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/authenticate", "/sign-up").permitAll() 
-                .anyRequest().permitAll() 
-            )
-
-            
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-
-           .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/authenticate", "/sign-up").permitAll() // Allow authentication endpoints without authentication
+                        .anyRequest().permitAll())  // authenticated Require authentication for all other requests
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -60,6 +49,7 @@ public class WebSecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();

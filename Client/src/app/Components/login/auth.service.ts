@@ -99,12 +99,11 @@ export class AuthService {
     if (this.userPayload) return this.userPayload.role;
   }
 
-  getEmailFromToken(): string {
+  getUserNameFromToken(): string {
     if (this.userPayload) {
-      console.log("This is the email By Bayload : ");
-      console.log(this.userPayload.email);
+      console.log("This is the username By Bayload : ");
 
-      return this.userPayload.email;
+      return this.userPayload.username;
     }
     return '';
   }

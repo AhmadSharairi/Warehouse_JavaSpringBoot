@@ -1,56 +1,65 @@
-<div class="container my-3">
+<div class="container my-3 my-5">
   <div class="row mt-3">
     <div class="col-lg-9 mx-auto">
-      <h3>Added Warehouse</h3>
+      <h3 class="mb-4">Add Warehouse</h3>
 
       <form [formGroup]="warehousForm" (ngSubmit)="saveWarehouse()" autocomplete="off" novalidate #formRef="ngForm">
-        <div class="row g-3 mb-3 my-2">
-          <div class="col-md-6 mb-3">
-            <label for="name" class="form-label">Warehouse Name</label>
-            <input type="text" class="form-control" id="name" formControlName="name" placeholder="Warehouse Name"
+        <div class="row g-3 mb-4">
+          <!-- Warehouse Name -->
+          <div class="col-md-6">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter warehouse name"
               required [ngClass]="{'is-invalid': isInvalid('name')}">
             <div *ngIf="isInvalid('name')" class="invalid-feedback">Name is required.</div>
           </div>
 
-          <div class="col-md-6 mb-3">
-            <label for="description" class="form-label">Warehouse Description</label>
-            <input type="text" class="form-control" id="description" formControlName="description" placeholder="Warehouse Description"
+          <!-- Warehouse Description -->
+          <div class="col-md-6">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" formControlName="description" placeholder="Enter warehouse description"
               required [ngClass]="{'is-invalid': isInvalid('description')}">
             <div *ngIf="isInvalid('description')" class="invalid-feedback">Description is required.</div>
           </div>
         </div>
 
         <div formArrayName="items">
-          <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="row mb-3">
+          <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="row g-3 mb-3">
+            <!-- Item Name -->
             <div class="col-md-4">
               <label for="itemName{{i}}" class="form-label">Item Name</label>
-              <input type="text" class="form-control" id="itemName{{i}}" formControlName="name" placeholder="Item Name" required>
+              <input type="text" class="form-control" id="itemName{{i}}" formControlName="name" placeholder="Enter item name" required>
               <div *ngIf="isInvalid('items.' + i + '.name')" class="invalid-feedback">Item name is required.</div>
             </div>
 
+            <!-- Item Description -->
             <div class="col-md-4">
               <label for="itemDescription{{i}}" class="form-label">Item Description</label>
-              <input type="text" class="form-control" id="itemDescription{{i}}" formControlName="description" placeholder="Item Description" required>
+              <input type="text" class="form-control" id="itemDescription{{i}}" formControlName="description" placeholder="Enter item description" required>
               <div *ngIf="isInvalid('items.' + i + '.description')" class="invalid-feedback">Item description is required.</div>
             </div>
 
+            <!-- Item Quantity -->
             <div class="col-md-4">
               <label for="itemQuantity{{i}}" class="form-label">Quantity</label>
-              <input type="number" class="form-control" id="itemQuantity{{i}}" formControlName="quantity" placeholder="Quantity" required min="1">
+              <input type="number" class="form-control" id="itemQuantity{{i}}" formControlName="quantity" placeholder="Enter quantity" required min="1">
               <div *ngIf="isInvalid('items.' + i + '.quantity')" class="invalid-feedback">Quantity must be at least 1.</div>
             </div>
 
+            <!-- Remove Item Button -->
             <div class="col-md-12">
               <button type="button" class="btn btn-danger mt-2" (click)="removeItem(i)">Remove Item</button>
             </div>
           </div>
         </div>
 
-        <button type="button" class="btn btn-primary" (click)="addItem()">Add Item</button>
-        <button type="submit" class="btn btn-outline-success mb-3" [disabled]="warehousForm.invalid">Add Warehouse</button>
-
-        <hr class="mt-2 mb-5">
+        <!-- Add Item Button -->
+        <button type="button" class="btn btn-primary mb-3 mx-2" (click)="addItem()">Add Item</button>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-success mb-3" [disabled]="warehousForm.invalid">Add Warehouse</button>
       </form>
+      
+      <hr class="mt-4">
     </div>
   </div>
 </div>

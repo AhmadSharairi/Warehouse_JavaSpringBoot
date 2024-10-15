@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { WarehouseService } from '../warehouse/warehouse.service';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../login/auth.service';
+import { SupplyDocumentService } from '../SupplyDocument/supply-document.service';
 
 @Component({
   selector: 'app-home',
@@ -13,20 +14,32 @@ import { AuthService } from '../login/auth.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
+  curruntRoleName: string = '';
+  userName: string = '';
   warehouseCount: number = 0;
   UserCount: number = 0;
   ItemsCount: number = 0;
+  SupplyCount: number =0;
 
   constructor(
     private warehouseService: WarehouseService,
     private userService: UserService,
     private authService: AuthService,
+    private supplyService: SupplyDocumentService,
     private route: Router
   ) {}
   ngOnInit(): void {
+    this.curruntRoleName = this.authService.getRoleFromToken();
+    this.userName = this.authService.getUserNameFromToken();
     this.getWarehouseCount();
     this.getUserCount();
     this.getTotalItemsCount();
+    if(this.curruntRoleName === 'Manager')
+    {
+       this.getSupplyCount();
+    }
+    this.getCustomSupplyCount();
+
   }
 
   getWarehouseCount() {
@@ -36,6 +49,24 @@ export class HomeComponent implements OnInit {
         (data: any) => (this.warehouseCount = data?.length || 0)
       );
   }
+
+  getSupplyCount() {
+    this.supplyService
+      .getAllSupplyDocuments()
+      .subscribe(
+        (data: any) => (this.SupplyCount = data?.length || 0)
+      );
+  }
+
+  getCustomSupplyCount() {
+    this.supplyService
+      .getSupplyDocumentsByCreated(this.userName)
+      .subscribe(
+        (data: any) => (this.SupplyCount = data?.length || 0)
+      );
+  }
+
+
 
   getUserCount() {
     this.userService.getAllUsers().subscribe((data: any) => {

@@ -7,4 +7,6 @@ public class AuthenticationDTO {
 
     private String username;
     private String password;
+
+
 }

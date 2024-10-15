@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class Warehouse {
 
     @Column(name = "created_by", nullable = false)
     private String createdBy;
-    
+
 
     @Column(name = "created_date_time", nullable = false)
     private LocalDateTime createdDateTime;
@@ -39,12 +38,13 @@ public class Warehouse {
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "warehouse")
+    private List<SupplyDocument> supplyDocuments;
+
 
     @PrePersist
     protected void onCreate() {
         createdDateTime = LocalDateTime.now();
     }
 
-
-   
 }

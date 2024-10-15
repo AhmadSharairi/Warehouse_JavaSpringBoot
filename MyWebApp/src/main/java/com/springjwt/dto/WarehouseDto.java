@@ -3,8 +3,6 @@ package com.springjwt.dto;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +14,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class WarehouseDto {
 
-    @JsonIgnore
+    // @JsonIgnore
     private Long id; 
 
     private String warehouseName;
 
     private String warehouseDescription;
+    
+    private String createdBy;
 
     private List<ItemDto> items;
 }

@@ -30,5 +30,11 @@ public class UserServiceImpl implements IUserService {
     }
 
 
+    public User getUserByUsername(String username) {
+  
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        return userOpt.orElse(null); 
+    }
+
   
 }

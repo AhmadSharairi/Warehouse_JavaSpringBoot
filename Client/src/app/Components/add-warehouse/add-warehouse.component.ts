@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { Warehouse } from '../../shared/models/Warehouse';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'app-add-warehouse',
@@ -23,6 +24,7 @@ export class AddWarehouseComponent implements AfterViewInit, OnInit {
   constructor(
     private fb: FormBuilder,
     private warehouseService: WarehouseService,
+    private authService: AuthService,
     private toastr: ToastrService,
     private router: Router
   ) {}
@@ -39,7 +41,7 @@ export class AddWarehouseComponent implements AfterViewInit, OnInit {
     this.warehousForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       description: ['', [Validators.required]],
-      items: this.fb.array([]) // Initialize items as a FormArray
+      items: this.fb.array([])
     });
   }
 
@@ -70,10 +72,11 @@ export class AddWarehouseComponent implements AfterViewInit, OnInit {
       const newWarehouse: Warehouse = {
         warehouseName: this.warehousForm.value.name,
         warehouseDescription: this.warehousForm.value.description,
-        items: this.warehousForm.value.items
+        items: this.warehousForm.value.items,
+        createdBy: this.authService.getUserNameFromToken(),
       };
 
-      console.log(newWarehouse);
+      console.log('New Warehouse Data:', newWarehouse);
 
       this.warehouseService.addWarehouseWithItems(newWarehouse).subscribe({
         next: (createdWarehouse) => {

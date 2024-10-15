@@ -42,18 +42,17 @@ export class WarehouseComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching warehouse data:', error);
-        this.toastr.error('Error fetching warehouse data. Please try again.');
+        // this.toastr.error('Error fetching warehouse data. Please try again.');
         this.loading = false;
       }
     );
   }
 
-  removeWarehouse(warehouseId: number) {
-    // Call the service to remove the warehouse
+  removeWarehouse(warehouseId: number)
+   {
     this.warehouseService.removeWarehouse(warehouseId).subscribe(response => {
-      // Optionally handle the response
       this.warehouses = this.warehouses.filter(warehouse => warehouse.id !== warehouseId);
-      this.warehouseCount = this.warehouses.length; // Update warehouse count
+      this.warehouseCount = this.warehouses.length;
     });
   }
 
@@ -65,4 +64,25 @@ export class WarehouseComponent implements OnInit {
   addWarehouse() {
     this.router.navigate(['/add-warehouse']);
   }
+
+
+  exportWarehouses() {
+    this.warehouseService.exportWarehouses().subscribe(response => {
+      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'warehouses.xlsx';
+      a.click();
+      window.URL.revokeObjectURL(url);
+      this.toastr.success('Warehouses exported successfully!');
+    }, error => {
+      console.error('Error exporting warehouses:', error);
+      this.toastr.error('Failed to export warehouses. Please try again.');
+    });
+  }
+
+
+
+
 }

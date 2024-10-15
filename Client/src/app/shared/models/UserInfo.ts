@@ -1,9 +1,8 @@
 export interface UserInfo {
   id: number;
-  email: string;
+  username: string;
   fullName: string;
-  isActive: boolean;
-  roleName: string;
+  // roleName: string;
   roleId: number;
   password:string;
 }

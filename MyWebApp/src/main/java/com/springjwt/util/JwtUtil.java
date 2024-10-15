@@ -5,19 +5,25 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.springjwt.entities.User;
+
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
 
-    public static final String SECRET = "18FEB1997";
+    public static final String SECRET = "18FEB19asdasdasdasdasdasdasdasdasdadsssssssssssssssssssssssssssssssssasdddddddddddddd97";
+    private static final long EXPIRATION_TIME = 1000 * 60 * 30; 
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -32,7 +38,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignKey())
@@ -50,24 +56,34 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String generateToken(String username) {
+  
+
+
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", username);
-        return createToken(claims, username); 
+        
+        claims.put("id", user.getId());
+        claims.put("role", user.getRole().getName()); 
+        claims.put("username", user.getUsername());
+        
+        return createToken(claims, user.getUsername());
     }
+    
 
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
-    private SecretKey getSignKey() {
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256); 
+     private SecretKey getSignKey() {
+        byte[] keyBytes = Base64.getEncoder().encode(SECRET.getBytes()); 
+        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
+    
     
 
 }

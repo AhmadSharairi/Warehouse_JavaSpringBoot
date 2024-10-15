@@ -1,28 +1,45 @@
 <div class="dashboard">
   <button (click)="logout()" class="logout-button">Logout</button>
 
-  <h1>Report</h1>
+  <h1>{{curruntRoleName}} Mode</h1>
 
   <div class="stats-container">
-    <div class="stat-card">
+    <div class="stat-card" *ngIf="curruntRoleName === 'Manager'">
       <h2>Warehouses</h2>
       <p>{{ warehouseCount }}</p>
     </div>
+    
+    <!-- This is now shown for all roles -->
     <div class="stat-card">
+      <h2>Supply Documents</h2>
+      <p>{{ SupplyCount }}</p>
+    </div>
+
+    <div class="stat-card" *ngIf="curruntRoleName === 'Manager'">
       <h2>Total Users</h2>
       <p>{{ UserCount }}</p>
     </div>
-    <div class="stat-card">
+    
+    <div class="stat-card" *ngIf="curruntRoleName === 'Manager'">
       <h2>Items in Stock</h2>
       <p>{{ ItemsCount }}</p>
     </div>
   </div>
 
-
   <div class="quick-links">
     <ul>
-      <li><button class="link-button" (click)="goWarehousPage()">Manage Warehouses</button></li>
-      <li><button class="link-button" (click)="goSubDecomentPage()">Manage Supply Documents</button></li>
+
+      <li *ngIf="curruntRoleName === 'Manager'">
+        <button class="link-button" (click)="goWarehousPage()">Manage Warehouses</button>
+      </li>
+  
+      <li *ngIf="curruntRoleName === 'Manager' || curruntRoleName === 'Employee'">
+        <button class="link-button" (click)="goSubDecomentPage()">
+    
+          {{ curruntRoleName === 'Manager' ? 'Manage Supply Documents' : 'Add Supply Documents' }}
+        </button>
+      </li>
     </ul>
   </div>
+  
 </div>

@@ -32,10 +32,11 @@ export class WarehouseItemsComponent implements OnInit {
       this.warehouseService.getItemsByWarehouseId(this.warehouseId).subscribe(
         (data: Item[]) => {
           console.log('API response:', data);
-          this.errorMessage = null; // Reset error message
+          this.errorMessage = null; 
           if (data && data.length > 0) {
             this.items = data;
             this.updatePaginatedItems();
+            console.log('Paginated items:', this.paginatedItems);
           } else {
             this.items = [];
             this.paginatedItems = [];
@@ -77,13 +78,13 @@ export class WarehouseItemsComponent implements OnInit {
   }
 
   showTopItems(): void {
-    this.items.sort((a, b) => b.Quantity - a.Quantity);
+    this.items.sort((a, b) => b.quantity - a.quantity); 
     this.paginatedItems = this.items.slice(0, 10);
     this.currentPage = 1;
   }
 
   showLowItems(): void {
-    this.items.sort((a, b) => a.Quantity - b.Quantity);
+    this.items.sort((a, b) => a.quantity - b.quantity); 
     this.paginatedItems = this.items.slice(0, 10);
     this.currentPage = 1;
   }

@@ -2,6 +2,7 @@ package com.springjwt.controllers;
 
 import com.springjwt.dto.SignupDto;
 import com.springjwt.dto.UserDto;
+import com.springjwt.repositories.RoleRepository;
 import com.springjwt.services.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,12 @@ public class SignupController {
     @Autowired
     private AuthService authService;
 
+
+
     @PostMapping("/sign-up")
     public ResponseEntity<?> signupUser(@RequestBody SignupDto signupDTO) 
-    {
+    { 
+        
        UserDto createdUser = authService.createUser(signupDTO);
        if (createdUser == null){
            return new ResponseEntity<>("User not created, come again later!", HttpStatus.BAD_REQUEST);

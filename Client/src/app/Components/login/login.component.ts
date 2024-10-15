@@ -54,19 +54,33 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     console.log(this.loginForm.value);
-    this.auth.loginPost(this.loginForm.value).subscribe((response: { jwtToken: any; }) => {
-      console.log(response);
-      if (response.jwtToken) {
 
-        const jwtToken = response.jwtToken;
-        localStorage.setItem('jwtToken', jwtToken);
-        this.toastr.success('Login Successfully');
-        this.router.navigate(['/home']);
+    this.auth.loginPost(this.loginForm.value).subscribe(
+      (response: { jwtToken: any; }) => {
+        console.log(response);
+        if (response.jwtToken) {
+          const jwtToken = response.jwtToken;
+          localStorage.setItem('jwtToken', jwtToken);
+          this.toastr.success('Login Successfully');
+          this.router.navigate(['/home']).then(() => window.location.reload());
+          
+        }
+      },
+      (error) => {
+
+        console.log('Login failed', error);
+
+
+        if (error.status === 403) {
+          this.toastr.error('Invalid username or password', 'Login Failed');
+        } else {
+
+          this.toastr.error('Something went wrong. Please try again later.', 'Login Failed');
+        }
       }
-    }
-
-  )
+    );
   }
+
   goRegister()
   {
     this.router.navigate(["/register"])

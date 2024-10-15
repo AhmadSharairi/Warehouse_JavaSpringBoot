@@ -16,7 +16,7 @@ import java.io.IOException;
 public class SimpleCorsFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleCorsFilter.class);
-    private static final String ALLOWED_ORIGINS = "http://localhost:4200";
+    private static final String ALLOWED_ORIGINS = "http://localhost:4200"; 
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -33,19 +33,13 @@ public class SimpleCorsFilter implements Filter {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
+
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             logger.info("CORS preflight request allowed: {}", originHeader);
-        } else {
-            chain.doFilter(req, res);
+            return; 
         }
-    }
 
-    @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
-    public void destroy() {
+        chain.doFilter(req, res);
     }
 }

@@ -8,7 +8,8 @@ import { WarehouseItemsComponent } from './Components/warehouse-items/warehouse-
 import { UpdateUserComponent } from './Components/update-user/update-user.component';
 import { AddWarehouseComponent } from './Components/add-warehouse/add-warehouse.component';
 import { SignupComponent } from './Components/signup/signup.component';
-import { SupplyDecComponent } from './Components/supply-dec/supply-dec.component';
+import { SupplyDecComponent } from './Components/SupplyDocument/supply-dec.component';
+import { AddDocumentComponent } from './Components/add-document/add-document.component';
 
 
 
@@ -20,6 +21,7 @@ export const routes: Routes = [
   {  path: 'warehouses/:id', component: WarehouseItemsComponent , canActivate: [authGuard]},
   {  path: 'supply', component: SupplyDecComponent , canActivate: [authGuard]},
   {  path: 'add-warehouse', component: AddWarehouseComponent , canActivate: [authGuard]},
-  {  path: 'user/:id/update-user', component: UpdateUserComponent, canActivate: [authGuard]},
-  {  path: 'users', component: UserComponent, canActivate: [authGuard]},
+  {  path: 'add-documnents', component: AddDocumentComponent , canActivate: [authGuard]},
+  // {  path: 'user/:id/update-user', component: UpdateUserComponent, canActivate: [authGuard]},
+  // {  path: 'users', component: UserComponent},
 ];

@@ -13,8 +13,8 @@ import lombok.Setter;
 public class ItemDto {
 
     private Long id;  
-    private String Name;    
-    private String Description; 
+    private String name;    
+    private String description; 
     private int quantity;     
 
     

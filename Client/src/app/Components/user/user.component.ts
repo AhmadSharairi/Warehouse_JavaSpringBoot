@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 })
 export class UserComponent implements OnInit {
   users: UserInfo[] = [];
-  emailUser: string = '';
+  username: string = '';
   curruntRoleName: string = '';
 
   constructor(
@@ -27,7 +27,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRoleByToken();
-    this.getEmailFromToken();
+    this.getUserNameFromToken();
     this.getAllUsers();
   }
 
@@ -36,9 +36,9 @@ export class UserComponent implements OnInit {
     return this.curruntRoleName;
   }
 
-  getEmailFromToken() {
-    this.emailUser = this.authSerive.getEmailFromToken();
-    return this.emailUser;
+  getUserNameFromToken() {
+    this.username = this.authSerive.getUserNameFromToken();
+    return this.username;
   }
 
   getAllUsers() {
@@ -79,26 +79,25 @@ export class UserComponent implements OnInit {
     }
   }
 
-  toggleUserStatus(user: UserInfo) {
-    if (user.email === this.emailUser) {
-      this.toastr.error('You cannot disable your own email account');
-      return;
-    }
+  // toggleUserStatus(user: UserInfo) {
+  //   if (user.username === this.username) {
+  //     this.toastr.error('You cannot disable your own username account');
+  //     return;
+  //   }
 
-    const previousStatus = user.isActive;
-    user.isActive = !user.isActive;
 
-    this.userService.updateUser(user.id, user).subscribe(
-      () => {
-        this.toastr.success(
-          `User has been ${user.isActive ? 'enabled' : 'disabled'}`
-        );
-      },
-      (error) => {
-        console.error('Error updating user status:', error);
-        this.toastr.error('Error updating user status. Please try again.');
-        user.isActive = previousStatus;
-      }
-    );
-  }
+
+  //   this.userService.updateUser(user.id, user).subscribe(
+  //     () => {
+  //       this.toastr.success(
+  //         `User has been ${user.isActive ? 'enabled' : 'disabled'}`
+  //       );
+  //     },
+  //     (error) => {
+  //       console.error('Error updating user status:', error);
+  //       this.toastr.error('Error updating user status. Please try again.');
+  //       user.isActive = previousStatus;
+  //     }
+  //   );
+  // }
 }

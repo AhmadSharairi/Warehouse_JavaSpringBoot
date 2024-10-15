@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,15 +35,20 @@ public class SupplyDocument {
 
     @Column(name = "created_by", nullable = false)
     private String createdBy;
+
+    @Column(name = "status")
+    private String status;
     
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "warehouse_id", nullable = false)
+    @JsonIgnore
     private Warehouse warehouse;
     
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
+    @JsonIgnore
     private Item item;
 
     
@@ -49,6 +56,8 @@ public class SupplyDocument {
     protected void onCreate() {
         createdDateTime = LocalDateTime.now();
     }
+
+    
 
 
 }
